@@ -1,5 +1,5 @@
 Things to do:
-	*add validation of input data
+DONE*add validation of input data
 	*check if ship is not out of board
 	*if adding more than 1flag ship, check if next segment is attached to the previous one
 	*menu

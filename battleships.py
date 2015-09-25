@@ -1,18 +1,4 @@
-'''
-Things to do:
-	*add validation of input data
-	*check if ship is not out of board
-	*if adding more than 1flag ship, check if next segment is attached to the previous one
-	*menu
-	*list of players witch posibility of adding new ones
-	*posibility of revenge
-	*history of matches - output to file "14.05.2015 'playerx' 1-2 'playery'" 
-	*change ('\n' * 100) to 'clear'/'clr - for windows' in terminal
-	*** in future - AI
-	*** multiplayer via lan/internet ??
-	*** multi lang
-'''
-
+import re
 class Battleships(object):
 
 	def __init__(self):
@@ -20,6 +6,17 @@ class Battleships(object):
 
 	def boardlegend(self):
 		pass
+
+	def validator(self, message):
+		pattern = '[0-9] [0-9]$'
+		while True:
+			data = input(message)
+			if re.match(pattern, data):
+				break
+			else:
+				print('\npodałeś niewłaściwą pozycję, spróbuj ponownie')
+				continue
+		return data
 
 	def emptyboard(self):
 	#make empty board with numerate sides
@@ -60,7 +57,7 @@ class Battleships(object):
 
 #START# staff for optimization
 			self.printboard(playerboard)
-			pos = input('podaj pozycję {} masztowca(np: \'3 4\' - 3 rząd i 4 kolumna)\npozostało Ci {} - {} masztowców :'.format(ship, flags[ship - 1], ship))
+			pos = self.validator('podaj pozycję {} masztowca(np: \'3 4\' - 3 rząd i 4 kolumna)\npozostało Ci {} - {} masztowców :'.format(ship, flags[ship - 1], ship))
 			x, y = self.position(pos)
 			if ship == 1:
 				playerboard[x+1][y+1] = '#'
@@ -70,7 +67,7 @@ class Battleships(object):
 				while additionalflag > 0:
 					playerboard[x+1][y+1] = '#'
 					self.printboard(playerboard)
-					anotherflag = input('podaj kolejną pozycję {} masztowca :'.format(ship))
+					anotherflag = self.validator('podaj kolejną pozycję {} masztowca :'.format(ship))
 					x, y = self.position(anotherflag)
 					playerboard[x+1][y+1] = '#'
 					additionalflag -= 1
@@ -95,7 +92,7 @@ class Battleships(object):
 		self.ptboardtest(player2)
 
 
-b = battleships()
+b = Battleships()
 
 b.playershipplacment()
 
