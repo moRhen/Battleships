@@ -1,12 +1,12 @@
 Things to do:
 DONE*add validation of input data
-	*check if ship is not out of board, on taken position or is touching other ship
-	*if adding more than 1flag ship, check if next segment is attached to the previous one
-	*menu
-	*list of players witch posibility of adding new ones
-	*posibility of revenge
-	*history of matches - output to file "14.05.2015 'playerx' 1-2 'playery'" 
-	*change ('\n' * 100) to 'clear'/'clr - for windows' in terminal
-	*** in future - AI
-	*** multiplayer via lan/internet ??
-	*** multi lang
+    *check if ship is not out of board, on taken position or is touching other ship
+    *if adding more than 1flag ship, check if next segment is attached to the previous one
+    *menu
+    *list of players witch posibility of adding new ones
+    *posibility of revenge
+    *history of matches - output to file "14.05.2015 'playerx' 1-2 'playery'" 
+    *change ('\n' * 100) to 'clear'/'clr - for windows' in terminal
+    *** in future - AI
+    *** multiplayer via lan/internet ??
+    *** multi lang
