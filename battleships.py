@@ -58,7 +58,7 @@ class Battleships(object):
 		ship = 1
 		while flags[3] > 0:
 
-#START# burdel do optymalizacji
+#START# staff for optimization
 			self.printboard(playerboard)
 			pos = input('podaj pozycję {} masztowca(np: \'3 4\' - 3 rząd i 4 kolumna)\npozostało Ci {} - {} masztowców :'.format(ship, flags[ship - 1], ship))
 			x, y = self.position(pos)
@@ -80,7 +80,7 @@ class Battleships(object):
 		self.printboard(playerboard)
 		input('Statki ustawione na planszy, naciśniej ENTER aby kontynuować')
 		return playerboard
-#END# koniec burdelnika
+#END# end of mess
 
 	def playershipplacment(self):
 		print('\n' * 100)
