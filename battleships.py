@@ -8,6 +8,7 @@ class Battleships(object):
 		pass
 
 	def validator(self, message):
+	#check if input data is "digit, space, digit"
 		pattern = '[0-9] [0-9]$'
 		while True:
 			data = input(message)
