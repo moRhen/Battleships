@@ -1,4 +1,7 @@
+#!/usr/bin/env python3
+
 import re
+import os
 class Battleships(object):
 
     def __init__(self):
@@ -18,6 +21,8 @@ class Battleships(object):
                 print('\npodałeś niewłaściwą pozycję, spróbuj ponownie')
                 continue
         return data
+    def clear(self):
+        os.system('cls' if os.name == 'nt' else 'clear')
 
     def emptyboard(self):
         #make empty board with numerate sides
@@ -30,7 +35,7 @@ class Battleships(object):
         return board
 
     def printboard(self, board):
-        print('\n' * 100)
+        self.clear()
         for n in board:
             print(' '.join(n))
         print('\n' * 4)
@@ -81,13 +86,13 @@ class Battleships(object):
 #END# end of mess
 
     def playershipplacment(self):
-        print('\n' * 100)
+        self.clear()
         input('proszę o ustawienie statków przez gracza nr 1, naciśniej ENTER aby kontynuować')
         player1 = self.shipplacment()
-        print('\n' * 100)
+        self.clear()
         input('proszę o ustawienie statków przez gracza nr 2, naciśniej ENTER aby kontynuować')
         player2 = self.shipplacment()
-        print('\n' * 100)
+        self.clear
         input('kontrolka ENTER')
         self.ptboardtest(player1)
         self.ptboardtest(player2)
