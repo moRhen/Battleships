@@ -10,22 +10,46 @@ class Battleships(object):
     def boardlegend(self):
         pass
 
-    def validator(self, message):
-    #check if data input matches "digit, space, digit"
+    def validator(self, message, playerboard):
+    #check if data input matches "digit, space, digit", is on board, and new ship is not placed on existing one
         pattern = '[0-9] [0-9]$'
+        trololo = 42
         while True:
             data = input(message)
             if re.match(pattern, data):
-                break
+                x, y = self.position(data)
+
+                if playerboard[x+1][y+1] == '*':
+                    around = [playerboard[x][y], playerboard[x][y+1], playerboard[x][y+2], playerboard[x+1][y], playerboard[x+2][y], playerboard[x+2][y+2], playerboard[x+1][y+2], playerboard[x+2][y+1]]
+
+                    if '#' not in around:
+                        break
+
+                    else:
+                        self.clear()
+                        self.printboard(playerboard)
+                        print('statek nie może stykać się z innym już istniejącym statkiem')
+                        continue
+                else:
+                    self.clear()
+                    self.printboard(playerboard)
+                    print('na podanej pozycji jest już statek')
+                    continue
             else:
-                print('\npodałeś niewłaściwą pozycję, spróbuj ponownie')
+                self.clear()
+                self.printboard(playerboard)
+                print('podałeś niewłaściwą pozycję, spróbuj ponownie')
                 continue
         return data
+
+    def validator2(self, data):
+        pass
+
     def clear(self):
         os.system('cls' if os.name == 'nt' else 'clear')
 
     def emptyboard(self):
-        #make empty board with numerate sides
+    #make empty board with numerate sides
         board = []
         border = list('$' + ''.join([str(x) for x in range(10)]) + '$')
         board.append(border)
@@ -63,7 +87,7 @@ class Battleships(object):
 
 #START# staff for optimization
             self.printboard(playerboard)
-            pos = self.validator('podaj pozycję {} masztowca(np: \'3 4\' - 3 rząd i 4 kolumna)\npozostało Ci {} - {} masztowców :'.format(ship, flags[ship - 1], ship))
+            pos = self.validator('podaj pozycję {} masztowca(np: \'3 4\' - 3 rząd i 4 kolumna)\npozostało Ci {} - {} masztowców :'.format(ship, flags[ship - 1], ship), playerboard)
             x, y = self.position(pos)
             if ship == 1:
                 playerboard[x+1][y+1] = '#'
@@ -73,7 +97,7 @@ class Battleships(object):
                 while additionalflag > 0:
                     playerboard[x+1][y+1] = '#'
                     self.printboard(playerboard)
-                    anotherflag = self.validator('podaj kolejną pozycję {} masztowca :'.format(ship))
+                    anotherflag = self.validator('podaj kolejną pozycję {} masztowca :'.format(ship), playerboard)
                     x, y = self.position(anotherflag)
                     playerboard[x+1][y+1] = '#'
                     additionalflag -= 1
