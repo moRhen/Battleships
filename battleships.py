@@ -52,9 +52,6 @@ class Battleships(object):
                 continue
         return data
 
-    def validator2(self, data):
-        pass
-
     def clear(self):
         os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -73,13 +70,6 @@ class Battleships(object):
         for n in board:
             print(' '.join(n))
         print('\n' * 4)
-
-    def ptboardtest(self, board):
-    #do kontroli
-        print('\n' * 1)
-        for n in board:
-            print(' '.join(n))
-        print('\n' * 1)
 
     def position(self, pos):
     #return 2 numbers which is x and y on our board
