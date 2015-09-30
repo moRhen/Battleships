@@ -10,21 +10,31 @@ class Battleships(object):
     def boardlegend(self):
         pass
 
-    def validator(self, message, playerboard):
+    def validator(self, message, playerboard, flagnumber, flagpos=None):
     #check if data input matches "digit, space, digit", is on board, and new ship is not placed on existing one
         pattern = '[0-9] [0-9]$'
-        trololo = 42
         while True:
             data = input(message)
             if re.match(pattern, data):
                 x, y = self.position(data)
-
                 if playerboard[x+1][y+1] == '*':
+                    if flagnumber == 42:
+                        isconnected = 0
+                        flagstick = [[x-1, y], [x, y-1], [x+1, y], [x, y+1]]
+                        for item in flagpos:
+                            if item in flagstick:
+                                isconnected += 1
+                        if isconnected >= 1:
+                            break
+                        else:
+                            self.clear()
+                            self.printboard(playerboard)
+                            print('nowy segment nie przylega do istniejącego już statku')
+                            continue
                     around = [playerboard[x][y], playerboard[x][y+1], playerboard[x][y+2], playerboard[x+1][y], playerboard[x+2][y], playerboard[x+2][y+2], playerboard[x+1][y+2], playerboard[x+2][y+1]]
 
                     if '#' not in around:
                         break
-
                     else:
                         self.clear()
                         self.printboard(playerboard)
@@ -71,7 +81,6 @@ class Battleships(object):
             print(' '.join(n))
         print('\n' * 1)
 
-
     def position(self, pos):
     #return 2 numbers which is x and y on our board
         pos = list(pos)
@@ -86,8 +95,9 @@ class Battleships(object):
         while flags[3] > 0:
 
 #START# staff for optimization
+            flagpos = []
             self.printboard(playerboard)
-            pos = self.validator('podaj pozycję {} masztowca(np: \'3 4\' - 3 rząd i 4 kolumna)\npozostało Ci {} - {} masztowców :'.format(ship, flags[ship - 1], ship), playerboard)
+            pos = self.validator('podaj pozycję {} masztowca(np: \'3 4\' - 3 rząd i 4 kolumna)\npozostało Ci {} - {} masztowców :'.format(ship, flags[ship - 1], ship), playerboard, 1)
             x, y = self.position(pos)
             if ship == 1:
                 playerboard[x+1][y+1] = '#'
@@ -96,8 +106,9 @@ class Battleships(object):
                 additionalflag = ship - 1
                 while additionalflag > 0:
                     playerboard[x+1][y+1] = '#'
+                    flagpos.append([x,y])
                     self.printboard(playerboard)
-                    anotherflag = self.validator('podaj kolejną pozycję {} masztowca :'.format(ship), playerboard)
+                    anotherflag = self.validator('podaj kolejną pozycję {} masztowca :'.format(ship), playerboard, 42, flagpos)
                     x, y = self.position(anotherflag)
                     playerboard[x+1][y+1] = '#'
                     additionalflag -= 1
@@ -116,13 +127,8 @@ class Battleships(object):
         self.clear()
         input('proszę o ustawienie statków przez gracza nr 2, naciśniej ENTER aby kontynuować')
         player2 = self.shipplacment()
-        self.clear
-        input('kontrolka ENTER')
-        self.ptboardtest(player1)
-        self.ptboardtest(player2)
-
+        self.clear()
+        return player1, player2
 
 b = Battleships()
-
 b.playershipplacment()
-

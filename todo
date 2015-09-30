@@ -1,7 +1,8 @@
 Things to do:
 DONE*add validation of input data
 DONE*check if ship is not out of board, on taken position, or is touching other ship
-    *if adding more than 1flag ship, check if next segment is attached to the previous one
+DONE*if adding more than 1flag ship, check if next segment is attached to the previous one
+    *game system, shot, report miss or hit
     *menu
     *list of players witch posibility of adding new ones
     *posibility of revenge
