@@ -10,29 +10,43 @@ class Battleships(object):
     def boardlegend(self):
         pass
 
-    def validator(self, message, playerboard, flagnumber, flagpos=None):
+    def validator(self, message, playerboard, spam=None, flagpos=None):
     #check if data input matches "digit, space, digit", is on board, and new ship is not placed on existing one
         pattern = '[0-9] [0-9]$'
         while True:
             data = input(message)
-            if re.match(pattern, data):
+            if re.match(pattern, data):#digit, space, digit
                 x, y = self.position(data)
-                if playerboard[x+1][y+1] == '*':
-                    if flagnumber == 42:
+                around = [playerboard[x][y], playerboard[x][y+1], playerboard[x][y+2], playerboard[x+1][y], playerboard[x+2][y], playerboard[x+2][y+2], playerboard[x+1][y+2], playerboard[x+2][y+1]]#symbols around x+1, y+1
+                if playerboard[x+1][y+1] == '*':#there is no ship already
+                    if spam == 42:#placment ship have more than 1flag
                         isconnected = 0
-                        flagstick = [[x-1, y], [x, y-1], [x+1, y], [x, y+1]]
-                        for item in flagpos:
+                        istouching = 0
+                        flagstick = [[x, y+1], [x+1, y], [x+2, y+1], [x+1, y+2]]#possible connection for multiply flag
+                        aroundpos = [[x, y], [x, y+1], [x, y+2], [x+1, y], [x+2, y], [x+2, y+2], [x+1, y+2], [x+2, y+1]]#pos around x, y
+                        for item in flagpos:#checking connection
                             if item in flagstick:
                                 isconnected += 1
-                        if isconnected >= 1:
+                        for item in flagpos:#position arount x+1, y+1 without pos of self ship
+                            if item in aroundpos:
+                                aroundpos.remove(item)
+                        for item in aroundpos:#check if new flag is touching another ship
+                            if playerboard[item[0]][item[1]] == '#':
+                                istouching += 1
+                        if isconnected >= 1 and istouching == 0:
+                            input('spełaniam; if isconnected >= 1 and istouching == 0:')
                             break
+                        elif isconnected >= 1 and istouching > 0:
+                            input('spełniam; elif isconnected >= 1 and istouching > 0:')
+                            self.clear()
+                            self.printboard(playerboard)
+                            print('nowy segment nie może dotykać innego statku')
+                            continue
                         else:
                             self.clear()
                             self.printboard(playerboard)
                             print('nowy segment nie przylega do istniejącego już statku')
                             continue
-                    around = [playerboard[x][y], playerboard[x][y+1], playerboard[x][y+2], playerboard[x+1][y], playerboard[x+2][y], playerboard[x+2][y+2], playerboard[x+1][y+2], playerboard[x+2][y+1]]
-
                     if '#' not in around:
                         break
                     else:
@@ -87,7 +101,7 @@ class Battleships(object):
 #START# staff for optimization
             flagpos = []
             self.printboard(playerboard)
-            pos = self.validator('podaj pozycję {} masztowca(np: \'3 4\' - 3 rząd i 4 kolumna)\npozostało Ci {} - {} masztowców :'.format(ship, flags[ship - 1], ship), playerboard, 1)
+            pos = self.validator('podaj pozycję {} masztowca(np: \'3 4\' - 3 rząd i 4 kolumna)\npozostało Ci {} - {} masztowców :'.format(ship, flags[ship - 1], ship), playerboard)
             x, y = self.position(pos)
             if ship == 1:
                 playerboard[x+1][y+1] = '#'
@@ -96,7 +110,7 @@ class Battleships(object):
                 additionalflag = ship - 1
                 while additionalflag > 0:
                     playerboard[x+1][y+1] = '#'
-                    flagpos.append([x,y])
+                    flagpos.append([x+1,y+1])
                     self.printboard(playerboard)
                     anotherflag = self.validator('podaj kolejną pozycję {} masztowca :'.format(ship), playerboard, 42, flagpos)
                     x, y = self.position(anotherflag)
@@ -119,6 +133,11 @@ class Battleships(object):
         player2 = self.shipplacment()
         self.clear()
         return player1, player2
+
+    def gamesystem(self):
+        self.clear()
+        input('Gra w statki\n Aby rozpocząć rozgrywkę naciśniej ENTER')
+        player1, player2 = self.playershipplacment()
 
 b = Battleships()
 b.playershipplacment()
