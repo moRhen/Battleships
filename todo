@@ -2,7 +2,8 @@ Things to do:
 DONE*add validation of input data
 DONE*check if ship is not out of board, on taken position, or is touching other ship
 DONE*if adding more than 1flag ship, check if next segment is attached to the previous one
-    *game system, shot, report miss or hit
+DONE*game system, shot, report miss or hit
+    *hit or sunk
     *menu
     *list of players witch posibility of adding new ones
     *posibility of revenge
@@ -11,3 +12,4 @@ DONE*change ('\n' * 100) to 'clear'/'clr - for windows' in terminal
     *** in future - AI
     *** multiplayer via lan/internet ??
     *** multi lang
+
