@@ -85,7 +85,9 @@ class Battleships(object):
     def shoot(self, shipboard, hitboard, hits, message):
         pattern = '[0-9] [0-9]$'
         while True:
-            print(hits)
+            if hits == 20:#if win break
+                break
+            self.printboard(hitboard)
             data = input(message)
             if re.match(pattern, data):#digit, space, digit
                 x, y = self.position(data)
@@ -105,7 +107,6 @@ class Battleships(object):
             else:
                 self.errormessage('Podałeś niewłaściwą pozycję, spróbuj ponownie', hitboard)
                 continue
-        print(hits)
         return hitboard, hits
 
     def shipplacment(self):
@@ -115,7 +116,7 @@ class Battleships(object):
         while flags[3] > 0:#until whole ship is placed
             flagpos = []
             self.printboard(playerboard)
-            pos = self.validator('podaj pozycję {} masztowca(np: \'3 4\' - 3 rząd i 4 kolumna)\npozostało Ci {} - {} masztowców :'.format(ship, flags[ship - 1], ship), playerboard)
+            pos = self.validator('Podaj pozycję {} masztowca(np: \'3 4\' - 3 rząd i 4 kolumna)\nPozostało Ci {} - {} masztowców :'.format(ship, flags[ship - 1], ship), playerboard)
             x, y = self.position(pos)
             if ship == 1:#for 1flag
                 playerboard[x+1][y+1] = '#'
@@ -126,7 +127,7 @@ class Battleships(object):
                     playerboard[x+1][y+1] = '#'#for 2flags
                     flagpos.append([x+1,y+1])#tracking ship segments
                     self.printboard(playerboard)
-                    anotherflag = self.validator('podaj kolejną pozycję {} masztowca :'.format(ship), playerboard, 42, flagpos)
+                    anotherflag = self.validator('Podaj kolejną pozycję {} masztowca :'.format(ship), playerboard, 42, flagpos)
                     x, y = self.position(anotherflag)
                     playerboard[x+1][y+1] = '#'
                     additionalflag -= 1
@@ -154,13 +155,16 @@ class Battleships(object):
         player1hit = self.emptyboard()
         player2hit = self.emptyboard()
         hits1, hits2 = 0, 0
-        while hits1 <= 20 or hits2 <= 20:#play until one of player hit 20 times   
+        while hits1 != 20 and hits2 != 20:#play until one of player hit 20 times
             player1hit, hits1 = self.shoot(player2, player1hit, hits1, 'Proszę o oddanie strzału przez gracza1 (np: \'3 4\' - 3 rząd i 4 kolumna)\n')
+            if hits1 == 20:#if player1 wins, break before player2 shoot
+                break
             player2hit, hits2 = self.shoot(player1, player2hit, hits2, 'Proszę o oddanie strzału przez gracza2 (np: \'3 4\' - 3 rząd i 4 kolumna)\n')
-        if hits1 == 20:
-            print('Gratulacje, gracz 1 wygrywa\nWszystkie statki zatopione :)')
-        elif hits2 == 20:
-            print('Gratulacje, gracz 2 wygrywa\nWszystkie statki zatopione :)')
+        if hits1 == 20:#player1 win
+            print('\nGratulacje, gracz 1 wygrywa, wszystkie statki zatopione :)')
+        elif hits2 == 20:#player2 win
+            print('\nGratulacje, gracz 2 wygrywa, wszystkie statki zatopione :)')
+        print('Koniec rozgrywki')
 
 if __name__ == "__main__":
     Battleships().gamesystem()
