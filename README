@@ -1,5 +1,10 @@
-Simple battleship game
-still in development
-curently polish messages to user
+Simple battleship game for 2 players
+First step is to place all ships on 10x10 matrix for each player
+Aviable ships are 4x1flag, 3x2flag, 2x3flag, and 1x4flag ship
+After that is turn by turn shooting phase
+If You shoot our opponent ship You will get extra hit
 
-playable version, yet not satisfy from it :P
+***
+still in development but playable
+curently polish messages to user
+all code in english - things like: variables, comments

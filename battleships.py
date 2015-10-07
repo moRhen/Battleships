@@ -7,10 +7,37 @@ class Battleships(object):
     def __init__(self):
         pass
 
-    def boardlegend(self):
-        pass
+    def clear(self):
+        os.system('cls' if os.name == 'nt' else 'clear')
 
-#2 validators#some equal patterns#need optimization#############################
+    def errormessage(self, message, board):
+        self.clear
+        self.printboard(board)
+        print(message)
+        input('Naciśnij ENTER, aby kontynuować')
+
+    def emptyboard(self):
+    #make empty board with numerate sides
+        board = []
+        border = list('$' + ''.join([str(x) for x in range(10)]) + '$')
+        board.append(border)
+        for n in range(10):
+            board.append(list(str(n) + ('*' * 10) + str(n)))
+        board.append(border)
+        return board
+
+    def printboard(self, board):
+        self.clear()
+        for n in board:
+            print(' '.join(n))
+        print('\n' * 4)
+
+    def position(self, pos):
+    #return 2 numbers which is x and y on our board
+        pos = list(pos)
+        x, y = pos[0], pos[2]
+        return int(x), int(y)
+
     def validator(self, message, playerboard, spam=None, flagpos=None):
     #check if data input matches "digit, space, digit", is on board, and new ship is not placed on existing one
         pattern = '[0-9] [0-9]$'
@@ -37,37 +64,28 @@ class Battleships(object):
                         if isconnected >= 1 and istouching == 0:#if parts connected and dont touch another ship return data
                             break
                         elif isconnected >= 1 and istouching > 0:
-                            self.clear()
-                            self.printboard(playerboard)
-                            print('nowy segment nie może dotykać innego statku')
+                            self.errormessage('Nowy segment nie może dotykać innego statku', playerboard)
                             continue
                         else:
-                            self.clear()
-                            self.printboard(playerboard)
-                            print('nowy segment nie przylega do istniejącego już statku')
+                            self.errormessage('Nowy segment nie przylega do istniejącego już statku', playerboard)
                             continue
                     if '#' not in around:#for 1flag or starting flag, if not touchng another ship return data
                         break
                     else:
-                        self.clear()
-                        self.printboard(playerboard)
-                        print('statek nie może stykać się z innym już istniejącym statkiem')
+                        self.errormessage('Statek nie może stykać się z innym już istniejącym statkiem', playerboard)
                         continue
                 else:
-                    self.clear()
-                    self.printboard(playerboard)
-                    print('na podanej pozycji jest już statek')
+                    self.errormessage('Na podanej pozycji jest już statek', playerboard)
                     continue
             else:
-                self.clear()
-                self.printboard(playerboard)
-                print('podałeś niewłaściwą pozycję, spróbuj ponownie')
+                self.errormessage('Podałeś niewłaściwą pozycję, spróbuj ponownie', playerboard)
                 continue
         return data
 
     def shoot(self, shipboard, hitboard, hits, message):
         pattern = '[0-9] [0-9]$'
         while True:
+            print(hits)
             data = input(message)
             if re.match(pattern, data):#digit, space, digit
                 x, y = self.position(data)
@@ -75,54 +93,20 @@ class Battleships(object):
                     if shipboard[x+1][y+1] == '#':
                         hitboard[x+1][y+1] = '#'
                         hits += 1
-                        self.clear()
-                        self.printboard(hitboard)
-                        print('Trafiony')
-                        input('Naciśnij ENTER, aby kontynuować')
+                        self.errormessage('Trafiony', hitboard)
 
                     elif shipboard[x+1][y+1] == '*':
                         hitboard[x+1][y+1] = '-'
-                        self.clear()
-                        self.printboard(hitboard)
-                        print('Pudło')
+                        self.errormessage('Pudło', hitboard)
                         break
                 else:
-                    self.clear()
-                    self.printboard(hitboard)
-                    print('Ta pozycja została już ostrzelana')
+                    self.errormessage('Ta pozycja została już ostrzelana', hitboard)
                     continue
             else:
-                self.clear()
-                self.printboard(hitboard)
-                print('podałeś niewłaściwą pozycję, spróbuj ponownie')
+                self.errormessage('Podałeś niewłaściwą pozycję, spróbuj ponownie', hitboard)
                 continue
+        print(hits)
         return hitboard, hits
-################################################################################
-
-    def clear(self):
-        os.system('cls' if os.name == 'nt' else 'clear')
-
-    def emptyboard(self):
-    #make empty board with numerate sides
-        board = []
-        border = list('$' + ''.join([str(x) for x in range(10)]) + '$')
-        board.append(border)
-        for n in range(10):
-            board.append(list(str(n) + ('*' * 10) + str(n)))
-        board.append(border)
-        return board
-
-    def printboard(self, board):
-        self.clear()
-        for n in board:
-            print(' '.join(n))
-        print('\n' * 4)
-
-    def position(self, pos):
-    #return 2 numbers which is x and y on our board
-        pos = list(pos)
-        x, y = pos[0], pos[2]
-        return int(x), int(y)
 
     def shipplacment(self):
     #placment of ships in player board; 4x1flag 3x2flag 2x3flag 1x4flag
@@ -165,19 +149,18 @@ class Battleships(object):
 
     def gamesystem(self):
         self.clear()
-        input('Gra w statki dla dwóch graczy\n Aby rozpocząć rozgrywkę naciśniej ENTER')
+        input('Gra w statki dla dwóch graczy\nAby rozpocząć rozgrywkę naciśniej ENTER')
         player1, player2 = self.playershipplacment()
         player1hit = self.emptyboard()
         player2hit = self.emptyboard()
         hits1, hits2 = 0, 0
         while hits1 <= 20 or hits2 <= 20:#play until one of player hit 20 times   
-            player1hit, hits1 = self.shoot(player2, player1hit, hits1, 'Proszę o oddanie strzału przez gracza 1 (np: \'3 4\' - 3 rząd i 4 kolumna\n)')
-            player2hit, hits2 = self.shoot(player1, player2hit, hits2, 'Proszę o oddanie strzału przez gracza 2 (np: \'3 4\' - 3 rząd i 4 kolumna\n)')
+            player1hit, hits1 = self.shoot(player2, player1hit, hits1, 'Proszę o oddanie strzału przez gracza1 (np: \'3 4\' - 3 rząd i 4 kolumna)\n')
+            player2hit, hits2 = self.shoot(player1, player2hit, hits2, 'Proszę o oddanie strzału przez gracza2 (np: \'3 4\' - 3 rząd i 4 kolumna)\n')
         if hits1 == 20:
-            print('Gratulacje, gracz 1 wygrywa')
+            print('Gratulacje, gracz 1 wygrywa\nWszystkie statki zatopione :)')
         elif hits2 == 20:
-            print('Gratulacje, gracz 2 wygrywa')
+            print('Gratulacje, gracz 2 wygrywa\nWszystkie statki zatopione :)')
 
-
-b = Battleships()
-b.gamesystem()
+if __name__ == "__main__":
+    Battleships().gamesystem()
